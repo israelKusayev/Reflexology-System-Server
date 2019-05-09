@@ -1,11 +1,10 @@
 const monggose = require('mongoose');
 const winston = require('winston');
-const dbConfig = require('../config/db.json');
 
 // Connect to MongoDb
 module.exports = () => {
   monggose
-    .connect(dbConfig.connectionString, {
+    .connect(process.env.DB_CONNECTION_STRING, {
       useFindAndModify: false,
       useNewUrlParser: true,
       useCreateIndex: true

@@ -2,12 +2,10 @@ const winston = require('winston');
 require('winston-mongodb');
 require('express-async-errors');
 
-const dbConfig = require('../config/db.json');
-
 module.exports = () => {
   winston.add(new winston.transports.File({ filename: 'logs/logfile.log' }));
   winston.add(
-    new winston.transports.MongoDB({ db: dbConfig.connectionString })
+    new winston.transports.MongoDB({ db: process.env.DB_CONNECTION_STRING })
   );
   winston.add(
     new winston.transports.Console({
