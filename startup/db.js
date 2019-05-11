@@ -1,6 +1,8 @@
 const monggose = require('mongoose');
 const winston = require('winston');
 
+console.log(process.env.DB_CONNECTION_STRING);
+
 // Connect to MongoDb
 module.exports = () => {
   monggose

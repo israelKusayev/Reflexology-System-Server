@@ -2,6 +2,12 @@ const router = require('express').Router();
 const Treatment = require('../models/Treatment');
 const Patient = require('../models/Patient');
 
+// Get all treatments
+router.get('/', async (req, res) => {
+  const treatments = await Treatment.find();
+  res.status(200).send(treatments);
+});
+
 // Get all treatments according to patient id
 router.get('/:patientId', async (req, res) => {
   const { patientId } = req.params;
@@ -21,6 +27,19 @@ router.post('/', async (req, res) => {
 
 // Edit treatment
 router.put('/', async (req, res) => {
+  const { patientId, date } = req.body;
+  const patient = await Patient.findById(patientId);
+  if (!patient.lastTreatment) {
+    await Patient.findByIdAndUpdate(patientId, {
+      lastTreatment: date
+    });
+  } else {
+    if (new Date(date) > patient.lastTreatment) {
+      await Patient.findByIdAndUpdate(patientId, {
+        lastTreatment: date
+      });
+    }
+  }
   const treatment = req.body;
   const editedTreatment = await Treatment.findByIdAndUpdate(
     treatment._id,
