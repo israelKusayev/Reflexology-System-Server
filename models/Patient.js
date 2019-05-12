@@ -9,6 +9,7 @@ const patientSchema = new mongoose.Schema({
   phone: { type: String, trim: true },
   email: { type: String, trim: true },
   createdAt: { type: Date, default: Date.now },
+  createdBy: { type: mongoose.Schema.Types.ObjectId, required: true },
   lastTreatment: { type: Date }
 });
 
