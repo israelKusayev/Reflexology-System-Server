@@ -18,11 +18,15 @@ router.get('/:patientId', async (req, res) => {
 
 // Add new treatment
 router.post('/', async (req, res) => {
-  const Newtreatment = await Treatment.create(req.body);
-  await Patient.findByIdAndUpdate(req.body.patientId, {
-    lastTreatment: req.body.date
-  });
-  res.status(201).send(Newtreatment);
+  const { patientId, date } = req.body;
+
+  const newTreatment = await Treatment.create(req.body);
+
+  // Update last treatment
+  const patient = await Patient.findById(patientId);
+  await patient.updateLastTreatment(date);
+
+  res.status(201).send(newTreatment);
 });
 
 // Edit treatment
@@ -39,25 +43,7 @@ router.put('/', async (req, res) => {
 
   // Update last treatment
   const patient = await Patient.findById(patientId);
-
-  if (!patient.lastTreatment) {
-    await Patient.findByIdAndUpdate(patientId, {
-      lastTreatment: date
-    });
-  } else {
-    const lastTreatment = await Treatment.findOne(
-      { patientId: req.body.patientId },
-      'date',
-      {
-        sort: {
-          date: -1 //Sort by Date Added DESC
-        }
-      }
-    );
-
-    patient.lastTreatment = lastTreatment.date;
-    await Patient.findByIdAndUpdate(patientId, patient);
-  }
+  await patient.updateLastTreatment(date);
 
   res.status(200).send(editedTreatment);
 });

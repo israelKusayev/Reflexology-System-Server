@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const Treatment = require('./Treatment');
 // Create Schema
 const patientSchema = new mongoose.Schema({
   firstName: { type: String, trim: true, required: true },
@@ -12,5 +12,24 @@ const patientSchema = new mongoose.Schema({
   createdBy: { type: mongoose.Schema.Types.ObjectId, required: true },
   lastTreatment: { type: Date }
 });
+
+patientSchema.methods.updateLastTreatment = async function(date) {
+  if (!this.lastTreatment) {
+    this.lastTreatment = date;
+  } else {
+    const lastTreatment = await Treatment.findOne(
+      { patientId: this._id },
+      'date',
+      {
+        sort: {
+          date: -1 //Sort by Date Added DESC
+        }
+      }
+    );
+
+    this.lastTreatment = lastTreatment.date;
+  }
+  this.save();
+};
 
 module.exports = Patient = mongoose.model('patient', patientSchema);

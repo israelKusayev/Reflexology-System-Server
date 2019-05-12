@@ -3,3 +3,5 @@ coverage/
 logs/
 *.log
 *.env
+.env*
+.env.test

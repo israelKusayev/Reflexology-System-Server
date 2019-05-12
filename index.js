@@ -7,7 +7,7 @@ const envPath =
 
 console.log(envPath);
 
-require('dotenv').config({ path: envPath });
+require('dotenv').config({ path: __dirname + '/' + envPath });
 
 require('./startup/logging')();
 require('./startup/routes')(app);
