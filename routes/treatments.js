@@ -28,24 +28,38 @@ router.post('/', async (req, res) => {
 // Edit treatment
 router.put('/', async (req, res) => {
   const { patientId, date } = req.body;
-  const patient = await Patient.findById(patientId);
-  if (!patient.lastTreatment) {
-    await Patient.findByIdAndUpdate(patientId, {
-      lastTreatment: date
-    });
-  } else {
-    if (new Date(date) > patient.lastTreatment) {
-      await Patient.findByIdAndUpdate(patientId, {
-        lastTreatment: date
-      });
-    }
-  }
+
+  // Update treatment
   const treatment = req.body;
   const editedTreatment = await Treatment.findByIdAndUpdate(
     treatment._id,
     treatment,
     { new: true }
   );
+
+  // Update last treatment
+  const patient = await Patient.findById(patientId);
+
+  if (!patient.lastTreatment) {
+    await Patient.findByIdAndUpdate(patientId, {
+      lastTreatment: date
+    });
+  } else {
+    const lastTreatment = await Treatment.findOne(
+      { patientId: req.body.patientId },
+      'date',
+      {
+        sort: {
+          date: -1 //Sort by Date Added DESC
+        }
+      }
+    );
+
+    if (patient.lastTreatment < lastTreatment.date) {
+      patient.lastTreatment = lastTreatment.date;
+      await Patient.findByIdAndUpdate(patientId, patient);
+    }
+  }
 
   res.status(200).send(editedTreatment);
 });
