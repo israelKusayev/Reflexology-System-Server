@@ -3,13 +3,20 @@ const Patient = require('../models/Patient');
 
 // Get all patients
 router.get('/', async (req, res) => {
-  const patients = await Patient.find().sort({ createdAt: 'desc' });
+  const patients = await Patient.find({ createdBy: req.user._id }).sort({
+    lastTreatment: 'desc'
+  });
   res.status(200).send(patients);
 });
 
 // Add new patient
 router.post('/', async (req, res) => {
-  const newPatient = await Patient.create(req.body);
+  console.log(req.user);
+
+  const newPatient = await Patient.create({
+    ...req.body,
+    createdBy: req.user._id
+  });
   res.status(201).send(newPatient);
 });
 

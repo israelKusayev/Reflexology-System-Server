@@ -1,7 +1,6 @@
 const express = require('express');
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
-const { createToken } = require('../utils/jwt.js');
 
 const router = express.Router();
 
@@ -22,7 +21,7 @@ router.post('/', async (req, res) => {
   if (!valid) return res.status(400).send({ msg: 'סיסמא שגוייה' });
 
   // Create token
-  const token = createToken(user);
+  const token = user.generateAuthToken();
 
   return res.status(200).send({ token });
 });

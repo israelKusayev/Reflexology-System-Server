@@ -55,10 +55,8 @@ router.put('/', async (req, res) => {
       }
     );
 
-    if (patient.lastTreatment < lastTreatment.date) {
-      patient.lastTreatment = lastTreatment.date;
-      await Patient.findByIdAndUpdate(patientId, patient);
-    }
+    patient.lastTreatment = lastTreatment.date;
+    await Patient.findByIdAndUpdate(patientId, patient);
   }
 
   res.status(200).send(editedTreatment);
