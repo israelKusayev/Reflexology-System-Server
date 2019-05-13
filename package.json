@@ -4,7 +4,7 @@
   "description": "reservation system server",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watchAll",
+    "test": "jest --watchAll --runInBand",
     "test-": "jest --verbose --coverage"
   },
   "author": "israel kusayev",
@@ -22,6 +22,7 @@
     "winston-mongodb": "^5.0.0"
   },
   "devDependencies": {
+    "moment": "^2.24.0",
     "jest": "^24.8.0",
     "supertest": "^4.0.2"
   },

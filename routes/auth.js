@@ -25,4 +25,5 @@ router.post('/', async (req, res) => {
 
   return res.status(200).send({ token });
 });
+
 module.exports = router;
