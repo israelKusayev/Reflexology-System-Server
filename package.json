@@ -4,9 +4,9 @@
   "description": "reservation system server",
   "main": "index.js",
   "scripts": {
-    "test": "jest --runInBand --detectOpenHandles",
-    "test:watch": "jest --watchAll --runInBand",
-    "test:coverage": "jest --runInBand --verbose --coverage"
+    "test": "jest --runInBand --detectOpenHandles --forceExit",
+    "test:watch": "jest --watchAll --runInBand --forceExit",
+    "test:coverage": "jest --runInBand --verbose --coverage --forceExit"
   },
   "author": "israel kusayev",
   "license": "MIT",

@@ -7,12 +7,12 @@ const url = '/api/auth';
 let server;
 
 describe(url, () => {
-  beforeEach(() => {
+  beforeAll(() => {
     server = require('../../../index');
     userId = mongoose.Types.ObjectId();
   });
 
-  afterEach(async () => {
+  afterAll(async () => {
     await server.close();
   });
 
