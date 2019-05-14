@@ -4,7 +4,7 @@
   "description": "reservation system server",
   "main": "index.js",
   "scripts": {
-    "test": "jest --runInBand",
+    "test": "jest --runInBand --detectOpenHandles",
     "test:watch": "jest --watchAll --runInBand",
     "test:coverage": "jest --runInBand --verbose --coverage"
   },
