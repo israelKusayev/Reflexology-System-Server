@@ -4,8 +4,9 @@
   "description": "reservation system server",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watchAll --runInBand",
-    "test-": "jest --verbose --coverage"
+    "test": "jest --runInBand",
+    "test:watch": "jest --watchAll --runInBand",
+    "test:coverage": "jest --runInBand --verbose --coverage"
   },
   "author": "israel kusayev",
   "license": "MIT",
