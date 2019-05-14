@@ -58,4 +58,3 @@ workflows:
           filters:
             branches:
               only: master
-Heroku Orb Examples
