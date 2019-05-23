@@ -14,7 +14,11 @@ const patientSchema = new mongoose.Schema({
 });
 
 patientSchema.methods.updateLastTreatment = async function(date) {
+  console.log('a');
+
   if (!this.lastTreatment) {
+    console.log('b');
+
     this.lastTreatment = date;
   } else {
     const lastTreatment = await Treatment.findOne(
@@ -29,7 +33,7 @@ patientSchema.methods.updateLastTreatment = async function(date) {
 
     this.lastTreatment = lastTreatment.date;
   }
-  this.save();
+  return this.save();
 };
 
 module.exports = Patient = mongoose.model('patient', patientSchema);

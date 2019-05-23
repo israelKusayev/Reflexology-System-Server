@@ -11,6 +11,7 @@ router.get('/', async (req, res) => {
 // Get all treatments according to patient id
 router.get('/:patientId', async (req, res) => {
   const { patientId } = req.params;
+
   const treatments = await Treatment.find({ patientId }).sort({ _id: 'desc' });
 
   res.status(200).send(treatments);
@@ -19,6 +20,10 @@ router.get('/:patientId', async (req, res) => {
 // Add new treatment
 router.post('/', async (req, res) => {
   const { patientId, date } = req.body;
+
+  // Simple validation
+  if (!patientId)
+    return res.status(400).send({ msg: 'patient id is requierd' });
 
   const newTreatment = await Treatment.create(req.body);
 
@@ -31,15 +36,18 @@ router.post('/', async (req, res) => {
 
 // Edit treatment
 router.put('/', async (req, res) => {
-  const { patientId, date } = req.body;
+  const treatment = req.body;
+  const { patientId, _id, date } = treatment;
+
+  // Simple validation
+  if (!patientId)
+    return res.status(400).send({ msg: 'patient id is requierd' });
+  if (!_id) return res.status(400).send({ msg: 'treatment id is requierd' });
 
   // Update treatment
-  const treatment = req.body;
-  const editedTreatment = await Treatment.findByIdAndUpdate(
-    treatment._id,
-    treatment,
-    { new: true }
-  );
+  const editedTreatment = await Treatment.findByIdAndUpdate(_id, treatment, {
+    new: true
+  });
 
   // Update last treatment
   const patient = await Patient.findById(patientId);

@@ -1,6 +1,7 @@
 const Patinet = require('../../../models/Patient');
 const request = require('supertest');
-const User = require('../../../models/User.js');
+const User = require('../../../models/User');
+const mockedPatients = require('../../mockData/patients');
 const moment = require('moment');
 const mongoose = require('mongoose');
 const url = '/api/patients';
@@ -22,32 +23,9 @@ describe(url, () => {
 
   describe('GET/', () => {
     let patients;
-    beforeEach(async () => {
-      patients = [
-        {
-          firstName: 'first1',
-          lastName: 'last1',
-          lastTreatment: moment(),
-          createdBy: userId
-        },
-        {
-          firstName: 'first2',
-          lastName: 'last2',
-          lastTreatment: moment().add(1, 'days'), // the last treatment
-          createdBy: userId
-        },
-        {
-          firstName: 'first3',
-          lastName: 'last3',
-          lastTreatment: moment(),
-          createdBy: userId
-        },
-        {
-          firstName: 'first4',
-          lastName: 'last4'
-        }
-      ];
 
+    beforeEach(async () => {
+      patients = mockedPatients.getPatients(userId);
       await Patinet.collection.insertMany(patients);
     });
 
@@ -88,11 +66,9 @@ describe(url, () => {
     let patient;
 
     beforeEach(() => {
-      patient = {
-        firstName: '12345',
-        lastName: '12345'
-      };
+      patient = mockedPatients.getPatient();
     });
+
     const exec = () => {
       return request(server)
         .post(url)
@@ -123,10 +99,11 @@ describe(url, () => {
 
   describe('PUT/', () => {
     let patient;
-    let _id;
     let editedPatient;
 
     const exec = () => {
+      console.log(editedPatient);
+
       return request(server)
         .put(url)
         .set('x-auth-token', token)
@@ -134,22 +111,15 @@ describe(url, () => {
     };
 
     beforeEach(async () => {
+      mockedPatient = mockedPatients.getPatient();
+      patient = new Patinet(mockedPatient);
+      patient = await patient.save();
+
       editedPatient = {
-        _id: _id,
+        _id: patient._id,
         firstName: 'new',
-        lastName: 'new',
-        createdBy: userId
+        lastName: 'new'
       };
-
-      patient = new Patinet({
-        _id: _id,
-        firstName: 'first1',
-        lastName: 'last1',
-        createdBy: userId
-      });
-      await patient.save();
-
-      _id = patient._id;
     });
 
     it('should retun 400 if input is invalid (firstName)', async () => {
