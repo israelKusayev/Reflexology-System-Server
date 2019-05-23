@@ -4,7 +4,7 @@
   "description": "reservation system server",
   "main": "index.js",
   "scripts": {
-    "test": "jest --runInBand --detectOpenHandles --forceExit",
+    "test": "jest --runInBand --detectOpenHandles --forceExit --collectCoverage=true",
     "test:watch": "jest --watchAll --runInBand --forceExit",
     "test:coverage": "jest --runInBand --verbose --coverage --forceExit"
   },
