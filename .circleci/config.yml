@@ -35,7 +35,11 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       # run tests!
-      - run: npm test
+      - run:
+          name: "Run Jest and Collect Coverage Reports"
+          command:npm test --collectCoverage=true
+      - store_artifacts:
+          path: coverage
 
   deploy:
     docker:
