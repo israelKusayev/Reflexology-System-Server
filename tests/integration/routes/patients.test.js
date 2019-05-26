@@ -102,8 +102,6 @@ describe(url, () => {
     let editedPatient;
 
     const exec = () => {
-      console.log(editedPatient);
-
       return request(server)
         .put(url)
         .set('x-auth-token', token)

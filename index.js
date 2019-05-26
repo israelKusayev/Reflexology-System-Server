@@ -5,8 +5,6 @@ const app = express();
 const envPath =
   process.env.NODE_ENV === 'test' ? './.env.' + process.env.NODE_ENV : './.env';
 
-console.log(envPath);
-
 require('dotenv').config({ path: __dirname + '/' + envPath });
 
 require('./startup/logging')();

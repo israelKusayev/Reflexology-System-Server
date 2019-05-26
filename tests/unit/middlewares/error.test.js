@@ -3,23 +3,22 @@ const winston = require('winston');
 
 describe('error middleware', () => {
   it('should return 500 error', () => {
-    winston.error = (error, meta) => {};
+    winston.error = jest.fn();
     status = 0;
-    returnObj = null;
 
+    const mockJson = jest.fn();
     const res = {
       status: s => {
         status = s;
         return {
-          send: obj => {
-            returnObj = obj;
-          }
+          json: mockJson
         };
       }
     };
     errorMiddleware(new Error('error'), null, res, null);
 
     expect(status).toBe(500);
-    expect(returnObj).toHaveProperty('msg');
+    expect(mockJson.mock.calls.length).toBe(1);
+    expect(mockJson.mock.calls[0][0]).toHaveProperty('msg');
   });
 });
