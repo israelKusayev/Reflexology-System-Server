@@ -17,8 +17,8 @@ beforeEach(() => {
   fiveDaysAgo.setDate(fiveDaysAgo.getDate() - 5);
 });
 afterEach(() => {
-  Patient.remove({});
-  Treatment.remove({});
+  Patient.deleteMany({});
+  Treatment.deleteMany({});
 });
 
 describe('Patient model', () => {

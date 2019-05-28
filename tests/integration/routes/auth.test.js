@@ -33,7 +33,7 @@ describe(url, () => {
     });
 
     afterEach(async () => {
-      await User.remove({});
+      await User.deleteMany({});
     });
 
     it('should return 400 if username is not supplied', async () => {

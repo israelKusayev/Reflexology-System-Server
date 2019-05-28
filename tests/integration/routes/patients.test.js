@@ -18,7 +18,7 @@ describe(url, () => {
 
   afterEach(async () => {
     await server.close();
-    await Patinet.remove({});
+    await Patinet.deleteMany({});
   });
 
   describe('GET/', () => {
