@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest --runInBand --detectOpenHandles --forceExit --coverage --coverageReporters=text-lcov | coveralls",
     "test:watch": "jest --watchAll --runInBand --forceExit",
-    "test:coverage": "jest --runInBand --verbose --coverage --forceExit"
+    "test:coverage": "jest --runInBand --verbose --coverage --forceExit "
   },
   "author": "israel kusayev",
   "license": "MIT",
@@ -29,6 +29,10 @@
     "supertest": "^4.0.2"
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "<rootDir>/test/mockData/",
+      "<rootDir>/node_modules/"
+    ]
   }
 }

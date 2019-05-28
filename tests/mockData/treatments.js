@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
-const getTreatments = userId => [
-  { visitReason: 'abcd', patientId: userId, treatmentNumber: 1 },
-  { visitReason: 'efgh', patientId: userId, treatmentNumber: 2 },
+const getTreatments = patientId => [
+  { visitReason: 'abcd', patientId, treatmentNumber: 1 },
+  { visitReason: 'efgh', patientId, treatmentNumber: 2 },
   {
     visitReason: 'igkl',
     patientId: mongoose.Types.ObjectId(),
@@ -10,6 +10,6 @@ const getTreatments = userId => [
   }
 ];
 
-const getTreatment = userId => getTreatments(userId)[0];
+const getTreatment = patientId => getTreatments(patientId)[0];
 
 module.exports = { getTreatments, getTreatment };

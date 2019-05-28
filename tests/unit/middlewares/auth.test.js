@@ -68,4 +68,19 @@ describe('auth middleware', () => {
     delete user.password;
     expect(req.user).toMatchObject(user);
   });
+
+  it('should return 401 if catch an errror', () => {
+    const jwt = require('jsonwebtoken');
+    jwt.decode = jest.fn().mockImplementation(() => {
+      throw new Error();
+    });
+    setReq('abcd');
+    setRes();
+
+    authMiddleware(req, res, next);
+
+    expect(status).toBe(401);
+    expect(mockJson.mock.calls.length).toBe(1);
+    expect(mockJson.mock.calls[0][0]).toHaveProperty('msg');
+  });
 });
