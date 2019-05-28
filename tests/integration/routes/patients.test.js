@@ -2,7 +2,6 @@ const Patinet = require('../../../models/Patient');
 const request = require('supertest');
 const User = require('../../../models/User');
 const mockedPatients = require('../../mockData/patients');
-const moment = require('moment');
 const mongoose = require('mongoose');
 const url = '/api/patients';
 let server;

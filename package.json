@@ -4,9 +4,10 @@
   "description": "reservation system server",
   "main": "index.js",
   "scripts": {
-    "test": "jest --runInBand --detectOpenHandles --forceExit --coverage --coverageReporters=text-lcov | coveralls",
-    "test:watch": "jest --watchAll --runInBand --forceExit",
-    "test:coverage": "jest --runInBand --verbose --coverage --forceExit "
+    "test": "jest --runInBand --detectOpenHandles --verbose --forceExit",
+    "test:coverage": "npm run test -- --coverage",
+    "test:coveralls": "jest --runInBand --detectOpenHandles --verbose --forceExit --coverage --coverageReporters=text-lcov | coveralls",
+    "test:watch": "npm run test -- --watchAll"
   },
   "author": "israel kusayev",
   "license": "MIT",
