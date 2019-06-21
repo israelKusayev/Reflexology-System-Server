@@ -6,6 +6,7 @@ const patientSchema = new mongoose.Schema({
   lastName: { type: String, trim: true, required: true },
   momName: { type: String, trim: true },
   age: { type: String, trim: true },
+  lastAgeUpdate: { type: Date },
   phone: { type: String, trim: true },
   email: { type: String, trim: true },
   createdAt: { type: Date, default: Date.now },
@@ -16,6 +17,10 @@ const patientSchema = new mongoose.Schema({
 });
 
 patientSchema.pre('save', function() {
+  if (this.modifiedPaths().some(m => m === 'age')) {
+    this.lastAgeUpdate = Date();
+  }
+
   if (this.modifiedPaths().some(m => m === 'lastTreatmentCall')) {
     if (this.lastTreatmentCall === true) this.lastTreatmentCallDate = Date();
     else this.lastTreatmentCallDate = null;
@@ -34,6 +39,12 @@ patientSchema.methods.updateLastTreatment = async function(date) {
 
     this.lastTreatment = lastTreatment.date;
   }
+  return this.save();
+};
+
+patientSchema.methods.resetLastCall = async function() {
+  this.lastTreatmentCall = false;
+  this.lastTreatmentCallDate = null;
   return this.save();
 };
 

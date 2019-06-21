@@ -22,14 +22,14 @@ router.post('/', async (req, res) => {
   const { patientId, date } = req.body;
 
   // Simple validation
-  if (!patientId)
-    return res.status(400).send({ msg: 'patient id is requierd' });
+  if (!patientId) return res.status(400).send({ msg: 'patient id is requierd' });
 
   const newTreatment = await Treatment.create(req.body);
 
   // Update last treatment
   const patient = await Patient.findById(patientId);
   await patient.updateLastTreatment(date);
+  await patient.resetLastCall();
 
   res.status(201).send(newTreatment);
 });
@@ -40,8 +40,7 @@ router.put('/', async (req, res) => {
   const { patientId, _id, date } = treatment;
 
   // Simple validation
-  if (!patientId)
-    return res.status(400).send({ msg: 'patient id is requierd' });
+  if (!patientId) return res.status(400).send({ msg: 'patient id is requierd' });
   if (!_id) return res.status(400).send({ msg: 'treatment id is requierd' });
 
   // Update treatment
