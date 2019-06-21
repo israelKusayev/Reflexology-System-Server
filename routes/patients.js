@@ -12,8 +12,7 @@ router.get('/', async (req, res) => {
 // Add new patient
 router.post('/', async (req, res) => {
   // Simple validation
-  if (!req.body.firstName || !req.body.lastName)
-    return res.status(400).send({ msg: 'שם פרטי ושם משפחה הם שדות חובה' });
+  if (!req.body.firstName || !req.body.lastName) return res.status(400).send({ msg: 'שם פרטי ושם משפחה הם שדות חובה' });
 
   const newPatient = await Patient.create({
     ...req.body,
@@ -27,12 +26,12 @@ router.put('/', async (req, res) => {
   const patient = req.body;
 
   // Simple validation
-  if (!patient.firstName || !patient.lastName)
-    return res.status(400).send({ msg: 'שם פרטי ושם משפחה הם שדות חובה' });
+  if (!patient.firstName || !patient.lastName) return res.status(400).send({ msg: 'שם פרטי ושם משפחה הם שדות חובה' });
 
-  const editedPatient = await Patient.findByIdAndUpdate(patient._id, patient, {
-    new: true
-  });
+  const oldPatient = await Patient.findById(patient._id);
+  oldPatient.set({ ...patient });
+  const editedPatient = await oldPatient.save();
+
   res.status(200).send(editedPatient);
 });
 

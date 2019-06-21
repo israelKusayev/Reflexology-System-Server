@@ -10,22 +10,27 @@ const patientSchema = new mongoose.Schema({
   email: { type: String, trim: true },
   createdAt: { type: Date, default: Date.now },
   createdBy: { type: mongoose.Schema.Types.ObjectId, required: true },
-  lastTreatment: { type: Date }
+  lastTreatment: { type: Date },
+  lastTreatmentCall: { type: Boolean },
+  lastTreatmentCallDate: { type: Date }
+});
+
+patientSchema.pre('save', function() {
+  if (this.modifiedPaths().some(m => m === 'lastTreatmentCall')) {
+    if (this.lastTreatmentCall === true) this.lastTreatmentCallDate = Date();
+    else this.lastTreatmentCallDate = null;
+  }
 });
 
 patientSchema.methods.updateLastTreatment = async function(date) {
   if (!this.lastTreatment) {
     this.lastTreatment = date;
   } else {
-    const lastTreatment = await Treatment.findOne(
-      { patientId: this._id },
-      'date',
-      {
-        sort: {
-          date: -1 //Sort by Date Added DESC
-        }
+    const lastTreatment = await Treatment.findOne({ patientId: this._id }, 'date', {
+      sort: {
+        date: -1 //Sort by Date Added DESC
       }
-    );
+    });
 
     this.lastTreatment = lastTreatment.date;
   }
