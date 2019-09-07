@@ -5,15 +5,16 @@ const patientSchema = new mongoose.Schema({
   firstName: { type: String, trim: true, required: true },
   lastName: { type: String, trim: true, required: true },
   momName: { type: String, trim: true },
+  birthday: { type: Date },
   age: { type: String, trim: true },
   lastAgeUpdate: { type: Date },
   phone: { type: String, trim: true },
   email: { type: String, trim: true },
   createdAt: { type: Date, default: Date.now },
   createdBy: { type: mongoose.Schema.Types.ObjectId, required: true },
-  lastTreatment: { type: Date },
-  lastTreatmentCall: { type: Boolean },
-  lastTreatmentCallDate: { type: Date }
+  lastTreatment: { type: Date }
+  // lastTreatmentCall: { type: Boolean },
+  // lastTreatmentCallDate: { type: Date }
 });
 
 patientSchema.pre('save', function() {

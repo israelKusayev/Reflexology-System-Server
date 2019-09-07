@@ -9,6 +9,9 @@ const treatmentSchema = new mongoose.Schema({
   findings: { type: String, trim: true },
   recommendations: { type: String, trim: true },
   remarks: { type: String, trim: true },
+  reminders: { type: String, trim: true },
+  reminderDate: { type: Date },
+  isReminderCompleted: { type: Boolean, default: false },
   patientId: { type: mongoose.Schema.Types.ObjectId }
 });
 
