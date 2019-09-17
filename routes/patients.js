@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const Patient = require('../models/Patient');
+const moment = require('moment');
 
 // Get all patients
 router.get('/', async (req, res) => {
@@ -12,7 +13,10 @@ router.get('/', async (req, res) => {
 // Add new patient
 router.post('/', async (req, res) => {
   // Simple validation
-  if (!req.body.firstName || !req.body.lastName) return res.status(400).send({ msg: 'שם פרטי ושם משפחה הם שדות חובה' });
+  if (!req.body.firstName || !req.body.lastName)
+    return res.status(400).send({ msg: 'שם פרטי ושם משפחה הם שדות חובה' });
+  if (req.body.birthday)
+    req.body.birthday = moment.utc(req.body.birthday, 'DD/MM/YYYY');
 
   const newPatient = await Patient.create({
     ...req.body,
@@ -26,7 +30,11 @@ router.put('/', async (req, res) => {
   const patient = req.body;
 
   // Simple validation
-  if (!patient.firstName || !patient.lastName) return res.status(400).send({ msg: 'שם פרטי ושם משפחה הם שדות חובה' });
+  if (!patient.firstName || !patient.lastName)
+    return res.status(400).send({ msg: 'שם פרטי ושם משפחה הם שדות חובה' });
+
+  if (req.body.birthday)
+    req.body.birthday = moment.utc(req.body.birthday, 'DD/MM/YYYY');
 
   const oldPatient = await Patient.findById(patient._id);
   oldPatient.set({ ...patient });
