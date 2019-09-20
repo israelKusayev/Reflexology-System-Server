@@ -20,6 +20,8 @@ router.get('/:patientId', async (req, res) => {
 // Add new treatment
 router.post('/', async (req, res) => {
   const { patientId, date } = req.body;
+  console.log(req.body.findings);
+  console.log(req.body.findings.split('\\n'));
 
   // Simple validation
   if (!patientId) return res.status(400).send({ msg: 'patient id is requierd' });
