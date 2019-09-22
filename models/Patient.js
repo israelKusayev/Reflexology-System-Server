@@ -10,7 +10,7 @@ const patientSchema = new mongoose.Schema(
     momName: { type: String, trim: true },
     birthday: { type: Date },
     age: { type: String, trim: true },
-    lastAgeUpdate: { type: Date },
+    lastAgeUpdate: { type: Date }, // TODO remove
     phone: { type: String, trim: true },
     email: { type: String, trim: true },
     createdAt: { type: Date, default: Date.now },
@@ -27,10 +27,10 @@ patientSchema.pre('save', function() {
     this.lastAgeUpdate = Date();
   }
 
-  if (this.modifiedPaths().some(m => m === 'lastTreatmentCall')) {
-    if (this.lastTreatmentCall === true) this.lastTreatmentCallDate = Date();
-    else this.lastTreatmentCallDate = null;
-  }
+  // if (this.modifiedPaths().some(m => m === 'lastTreatmentCall')) {
+  //   if (this.lastTreatmentCall === true) this.lastTreatmentCallDate = Date();
+  //   else this.lastTreatmentCallDate = null;
+  // }
 });
 
 patientSchema.methods.updateLastTreatment = async function(date) {
@@ -52,11 +52,11 @@ patientSchema.methods.updateLastTreatment = async function(date) {
   return this.save();
 };
 
-patientSchema.methods.resetLastCall = async function() {
-  this.lastTreatmentCall = false;
-  this.lastTreatmentCallDate = null;
-  return this.save();
-};
+// patientSchema.methods.resetLastCall = async function() {
+//   this.lastTreatmentCall = false;
+//   this.lastTreatmentCallDate = null;
+//   return this.save();
+// };
 
 patientSchema.virtual('calculatedAge').get(function() {
   if (this.birthday) return convertDateToAge(this.birthday);

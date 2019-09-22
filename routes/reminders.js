@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const Treatment = require('../models/Treatment');
 const mongoose = require('mongoose');
+const moment = require('moment');
 
 // Get all reminders
 router.get('/', async (req, res) => {
@@ -36,7 +37,11 @@ router.get('/', async (req, res) => {
         as: 'patient'
       }
     },
-    { $match: { 'patient.createdBy': { $eq: mongoose.Types.ObjectId(req.user._id) } } },
+    {
+      $match: {
+        'patient.createdBy': { $eq: mongoose.Types.ObjectId(req.user._id) }
+      }
+    },
     {
       $project: {
         reminders: 1,
@@ -72,7 +77,11 @@ router.get('/newRemindersCount', async (req, res) => {
         as: 'patient'
       }
     },
-    { $match: { 'patient.createdBy': { $eq: mongoose.Types.ObjectId(req.user._id) } } },
+    {
+      $match: {
+        'patient.createdBy': { $eq: mongoose.Types.ObjectId(req.user._id) }
+      }
+    },
     {
       $count: 'count'
     }
@@ -82,9 +91,19 @@ router.get('/newRemindersCount', async (req, res) => {
 });
 
 router.patch('/:treatmentId', async (req, res) => {
-  const treatment = await Treatment.findByIdAndUpdate(req.params.treatmentId, { $set: req.body });
+  if (req.body.reminderDate)
+    req.body.reminderDate = moment.utc(req.body.reminderDate, 'DD/MM/YYYY'); //TODO validate date
+
+  const treatment = await Treatment.findByIdAndUpdate(
+    req.params.treatmentId,
+    {
+      $set: req.body
+    },
+    { new: true }
+  );
 
   if (!treatment) return res.status(400).end({ msg: 'טיפול לא נמצא לתזכורת' }); // todo;
+
   res.status(204).end();
 });
 module.exports = router;

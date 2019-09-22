@@ -15,8 +15,9 @@ router.post('/', async (req, res) => {
   // Simple validation
   if (!req.body.firstName || !req.body.lastName)
     return res.status(400).send({ msg: 'שם פרטי ושם משפחה הם שדות חובה' });
+
   if (req.body.birthday)
-    req.body.birthday = moment.utc(req.body.birthday, 'DD/MM/YYYY');
+    req.body.birthday = moment.utc(req.body.birthday, 'DD/MM/YYYY'); // TODO: validate date
 
   const newPatient = await Patient.create({
     ...req.body,
