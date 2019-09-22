@@ -53,12 +53,32 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/newRemindersCount', async (req, res) => {
-  const count = await Treatment.find({
-    reminderDate: { $lte: new Date() },
-    isReminderCompleted: false
-  }).countDocuments();
+  const count = await Treatment.aggregate([
+    {
+      $match: {
+        $and: [
+          {
+            isReminderCompleted: { $eq: false },
+            reminderDate: { $lte: new Date() }
+          }
+        ]
+      }
+    },
+    {
+      $lookup: {
+        from: 'patients',
+        localField: 'patientId',
+        foreignField: '_id',
+        as: 'patient'
+      }
+    },
+    { $match: { 'patient.createdBy': { $eq: mongoose.Types.ObjectId(req.user._id) } } },
+    {
+      $count: 'count'
+    }
+  ]);
 
-  res.status(200).send({ count });
+  res.status(200).send(count[0]);
 });
 
 router.patch('/:treatmentId', async (req, res) => {
